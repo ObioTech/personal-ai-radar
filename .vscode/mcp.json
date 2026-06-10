@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "ai-workflow-infrastructure": {
+      "command": "aiwi",
+      "args": [
+        "mcp",
+        "start",
+        "--config",
+        "/Users/apple/Documents/00.PERSONAL/ObioRadar/.aiwi/config.json"
+      ]
+    }
+  }
+}

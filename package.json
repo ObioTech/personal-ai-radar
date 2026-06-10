@@ -1,0 +1,30 @@
+{
+  "name": "@obiotech/obio-radar",
+  "version": "0.1.0",
+  "description": "A personal AI technology radar that turns noisy tech signals into concise daily markdown reading notes.",
+  "type": "module",
+  "scripts": {
+    "daily": "tsx src/daily.ts",
+    "report": "tsx src/report.ts",
+    "dev": "tsx src/daily.ts --dry-run",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "better-sqlite3": "^9.6.0",
+    "rss-parser": "^3.13.0",
+    "zod": "^3.23.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.14.0",
+    "@types/better-sqlite3": "^7.6.0",
+    "vitest": "^1.6.0"
+  }
+}

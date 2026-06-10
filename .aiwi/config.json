@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "obioradar-f4c4fcc6",
+  "projectName": "ObioRadar",
+  "createdAt": "2026-06-10T10:15:39.543Z",
+  "updatedAt": "2026-06-10T11:01:19.122Z",
+  "documents": {
+    "roots": [
+      {
+        "path": "/Users/apple/Documents/00.PERSONAL/ObioRadar/docs",
+        "label": "docs",
+        "kind": "docs",
+        "categoryMode": "auto",
+        "fallbackCategory": "general",
+        "tags": []
+      }
+    ],
+    "include": [
+      "**/*.md",
+      "**/*.mdx",
+      "**/*.txt",
+      "**/*.rst",
+      "**/*.log"
+    ],
+    "exclude": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/.aiwi/**",
+      "**/dist/**"
+    ]
+  },
+  "code": {
+    "roots": [
+      {
+        "path": "/Users/apple/Documents/00.PERSONAL/ObioRadar",
+        "label": "ObioRadar",
+        "kind": "service",
+        "languages": [
+          "python",
+          "typescript"
+        ],
+        "repository": {
+          "root": "/Users/apple/Documents/00.PERSONAL/ObioRadar",
+          "scope": "local:/Users/apple/Documents/00.PERSONAL/ObioRadar"
+        }
+      }
+    ],
+    "include": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.py",
+      "**/*.go",
+      "**/*.rs"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.next/**"
+    ]
+  }
+}

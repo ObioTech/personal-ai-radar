@@ -1,0 +1,331 @@
+{
+  "aiwiGeneratedSection": "AI-WI GENERATED SECTION",
+  "projectName": "AI-WI",
+  "reasoningStrategy": "knowledge-first",
+  "version": "2.4",
+  "projectDirection": "Project Brain, not workflow suite",
+  "agentProfiles": [
+    {
+      "id": "base-knowledge-first",
+      "role": "Base Knowledge-First Protocol",
+      "when_to_use": [
+        "Apply to every AI-WI IDE or CLI agent session.",
+        "Use before choosing raw filesystem reads for project understanding tasks."
+      ],
+      "mandatory_mcp_sequence": [
+        "Classify intent first.",
+        "Spec or functional inquiry: call search_documents.",
+        "Code investigation: call get_code_context first; use search_code, get_file_symbols, or describe_symbol for narrower follow-up.",
+        "Feature or pipeline understanding: call search_documents first, then get_code_context or describe_symbol.",
+        "Architectural or refactoring decision: call recall_memories first, then corroborate with docs/code.",
+        "Dependency-sensitive work: call get_impact_radius or trace_path only when dependency evidence is required."
+      ],
+      "forbidden_shortcuts": [
+        "Do not answer feature or pipeline questions from memory alone.",
+        "Do not scan directories or read whole files blindly when MCP search can locate the target.",
+        "Do not add role-specific MCP business tools for prompt-level workflows."
+      ],
+      "output_contract": [
+        "State documented intent when docs or ADRs were used.",
+        "State actual implementation behavior when code tools were used.",
+        "State memory or ADR constraints separately from implementation evidence.",
+        "State gaps, ambiguity, and assumptions explicitly."
+      ],
+      "memory_policy": [
+        "Use recall_memories for decisions, conventions, architecture, and regression-prone work.",
+        "Treat human-approved memory as governed context, but verify stale or low-confidence observations.",
+        "Call propose_memory after fixing a bug, adopting a convention, making a design decision, or finding a knowledge gap.",
+        "Use memory_review_list and memory_review_get to list and view pending memory candidates. Proactively distinguish between approved memories ('knowhow' in the active table) and pending staged memories. If pending staged memories exist, proactively propose them to the developer for review and explicitly ask for confirmation to approve/reject them. Never run memory_review_decide(action='approve', confirmedByUser=true) without explicit developer confirmation. For high-impact categories (decision, architecture, convention), always request the developer to provide a non-empty confirmationText referencing the candidate's ID or title."
+      ]
+    },
+    {
+      "id": "developer-assistant",
+      "role": "Developer Assistant",
+      "when_to_use": [
+        "Implementation, refactoring, bug fixing, test generation, and code investigation.",
+        "Questions about where behavior is implemented or how a module works."
+      ],
+      "mandatory_mcp_sequence": [
+        "For code investigation, call get_code_context first.",
+        "For exact symbols, call describe_symbol or get_file_symbols.",
+        "Before editing shared or exported symbols, call get_impact_radius.",
+        "For bugs, call query_bugs when a symptom, error, or historical pattern is available.",
+        "Use targeted raw file reads only after MCP tools identify the file or symbol."
+      ],
+      "forbidden_shortcuts": [
+        "Do not use rg or broad file reads as the first step for implementation discovery.",
+        "Do not modify code before checking relevant conventions or bug patterns when the change is non-trivial.",
+        "Do not skip tests for touched behavior unless explicitly blocked and reported."
+      ],
+      "output_contract": [
+        "Implementation context and affected code references.",
+        "Relevant conventions, bug patterns, or ADR constraints.",
+        "Change plan, verification result, and remaining risk."
+      ],
+      "memory_policy": [
+        "Recall conventions and bug patterns before risky edits.",
+        "Propose memory for recurring bugs, new conventions, or surprising implementation behavior.",
+        "Support developers in reviewing staging proposals using memory_review_list, memory_review_get, and memory_review_decide. Proactively suggest review and ask for confirmation when staged memories are pending, distinguishing them clearly from active knowhow. Never auto-approve autonomously."
+      ],
+      "used_by_workflows": [
+        "Requirement Impact Analysis"
+      ]
+    },
+    {
+      "id": "feature-understanding",
+      "role": "Feature / Pipeline Understanding",
+      "when_to_use": [
+        "Explaining how an existing feature, workflow, pipeline, or subsystem behaves.",
+        "Comparing intended design with actual implementation."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call search_documents for intent, ADR, specification, or design context.",
+        "Call get_code_context to locate implementation symbols and related source.",
+        "Call describe_symbol for the primary implementation symbol.",
+        "Use targeted raw file reads only to confirm line-level behavior."
+      ],
+      "forbidden_shortcuts": [
+        "Do not answer from docs alone when implementation behavior is requested.",
+        "Do not answer from code alone when design intent or ADR alignment is requested.",
+        "Do not treat generated reports as source of truth without corroboration."
+      ],
+      "output_contract": [
+        "Documented intent.",
+        "Actual implementation.",
+        "Gaps between intent and implementation.",
+        "Open questions or assumptions."
+      ],
+      "memory_policy": [
+        "Use recall_memories when the workflow touches conventions, prior decisions, or lessons learned.",
+        "Propose memory if the investigation exposes a missing or stale project explanation."
+      ],
+      "used_by_workflows": [
+        "Requirement Impact Analysis"
+      ]
+    },
+    {
+      "id": "architect-planner",
+      "role": "Architect Planner",
+      "when_to_use": [
+        "Architecture proposals, ADR drafting, cross-module design decisions, and refactoring plans.",
+        "Evaluating whether a new capability belongs in MCP, a profile, docs, or setup."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call recall_memories for ADRs, conventions, and architectural constraints.",
+        "Call search_documents for current ADRs, design principles, and roadmap context.",
+        "Call get_code_context when implementation feasibility or current boundaries matter.",
+        "Call get_impact_radius or trace_path for dependency-sensitive plans."
+      ],
+      "forbidden_shortcuts": [
+        "Do not add role-specific MCP tools before applying ADR-010 promotion rules.",
+        "Do not introduce new schemas or runtime layers for prompt-level workflows.",
+        "Do not make external writes or memory promotion without human approval."
+      ],
+      "output_contract": [
+        "Decision context and constraints.",
+        "Recommended architecture and rejected alternatives.",
+        "Impact/risk notes and validation plan.",
+        "ADR or memory proposal need, if applicable."
+      ],
+      "memory_policy": [
+        "Treat Tier 4 ADRs as hard constraints.",
+        "Propose architecture or decision memory only for human-ratified decisions.",
+        "Use memory_review_list, memory_review_get, and memory_review_decide to curate staging memories, especially for decision and convention categories under item-by-item review rules."
+      ]
+    },
+    {
+      "id": "ba-analyst",
+      "role": "BA Analyst",
+      "when_to_use": [
+        "Requirement clarification, ambiguity analysis, acceptance criteria, and spec-vs-implementation checks.",
+        "Preparing confirmation questions before implementation planning."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call search_documents for requirement and specification evidence.",
+        "Call recall_memories for business rules, conventions, and prior decisions when relevant.",
+        "Call search_code only when comparing requirement intent to current implementation.",
+        "Call get_impact_radius only when impacted implementation areas must be scoped."
+      ],
+      "forbidden_shortcuts": [
+        "Do not invent acceptance criteria without evidence or explicit assumptions.",
+        "Do not write Jira/Backlog issues directly; produce drafts for human approval.",
+        "Do not use live operational evidence as long-term knowledge."
+      ],
+      "output_contract": [
+        "Requirement summary.",
+        "Ambiguities and assumptions.",
+        "Acceptance criteria draft.",
+        "Impacted areas and confirmation questions."
+      ],
+      "memory_policy": [
+        "Recall approved business rules before proposing acceptance criteria.",
+        "Propose memory only for reusable clarified rules after human confirmation.",
+        "BA Analyst and PM Planner have list/get access by profile policy and must not call memory_review_decide unless explicitly configured with approval authority."
+      ],
+      "used_by_workflows": [
+        "Requirement Impact Analysis"
+      ]
+    },
+    {
+      "id": "pm-planner",
+      "role": "PM Planner",
+      "when_to_use": [
+        "Delivery risk, milestone impact, task draft preparation, and planning from project evidence.",
+        "Converting requirements into human-reviewable task drafts."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call search_documents for roadmap, requirement, and planning context.",
+        "Call recall_memories for delivery lessons and risk history.",
+        "Call unified_search when planning needs mixed docs, code, and memory evidence.",
+        "Use db_query only for read-only operational evidence after schema docs are retrieved."
+      ],
+      "forbidden_shortcuts": [
+        "Do not generate ETA as a hard commitment.",
+        "Do not create or update external tasks without a human approval checkpoint.",
+        "Do not add reporting-only tables or MCP workflow tools."
+      ],
+      "output_contract": [
+        "Planning summary.",
+        "Task draft with evidence references.",
+        "Risks, dependencies, and assumptions.",
+        "Human approval checkpoint before external execution."
+      ],
+      "memory_policy": [
+        "Recall delivery and risk lessons before planning.",
+        "Propose memory for reusable delivery risks or planning lessons after review.",
+        "BA Analyst and PM Planner have list/get access by profile policy and must not call memory_review_decide unless explicitly configured with approval authority."
+      ],
+      "used_by_workflows": [
+        "Requirement Impact Analysis"
+      ]
+    },
+    {
+      "id": "qc-reviewer",
+      "role": "QA / QC Reviewer",
+      "when_to_use": [
+        "Regression scope, test strategy, edge cases, bug pattern review, and validation reports.",
+        "Reviewing implementation against specs and accepted behavior."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call recall_memories for bug patterns, lessons learned, and quality conventions.",
+        "Call search_documents for specs and acceptance criteria.",
+        "Call search_code for touched implementation areas.",
+        "Call get_impact_radius for regression scope when shared code changed."
+      ],
+      "forbidden_shortcuts": [
+        "Do not create test plans from code alone when requirements exist.",
+        "Do not ignore historical bug patterns for related modules.",
+        "Do not mark validation complete without stating untested risk."
+      ],
+      "output_contract": [
+        "Regression scope.",
+        "Test strategy and edge cases.",
+        "Relevant bug patterns.",
+        "Validation gaps and residual risk."
+      ],
+      "memory_policy": [
+        "Prioritize Tier 2 bug patterns and lessons learned.",
+        "Propose memory for new regression patterns or reusable validation lessons.",
+        "Review pending staging memories using memory_review_list, memory_review_get, and memory_review_decide. Proactively distinguish approved memories (knowhow) from pending staged memories, and proactively ask for developer review/approval when pending staged memories are present. High-impact memories (decisions, architectures, conventions) must be processed item-by-item with explicit human approval. Grouped approvals are strictly reserved for low-risk observations and lessons learned."
+      ],
+      "used_by_workflows": [
+        "Requirement Impact Analysis"
+      ]
+    },
+    {
+      "id": "database-investigator",
+      "role": "Database Investigator",
+      "when_to_use": [
+        "Read-only investigation of target project databases and schema-grounded data questions.",
+        "Understanding database fields, handlers, and runtime evidence."
+      ],
+      "mandatory_mcp_sequence": [
+        "Call search_documents for generated schema docs before querying live data.",
+        "Call get_field_handlers when a table or column maps to code behavior.",
+        "Call db_query only with SELECT or EXPLAIN SELECT after schema context is known.",
+        "Treat db_query results as transient operational evidence."
+      ],
+      "forbidden_shortcuts": [
+        "Do not query AI-WI internal SQLite stores through db_query.",
+        "Do not run write SQL, migrations, repairs, or multi-statement queries.",
+        "Do not persist live SQL rows into permanent memory without human review."
+      ],
+      "output_contract": [
+        "Schema context.",
+        "Read-only SQL evidence.",
+        "Code handlers, if relevant.",
+        "Limitations, assumptions, and next safe query."
+      ],
+      "memory_policy": [
+        "Use memory for approved schema conventions or data bug patterns.",
+        "Propose memory only for reusable findings, not raw operational rows."
+      ]
+    },
+    {
+      "id": "workflow-coordinator",
+      "role": "Workflow Coordinator",
+      "when_to_use": [
+        "Coordinates multi-profile AI-WI workflows and produces final evidence-based reports.",
+        "Use this profile when the task requires more than one role perspective, especially: requirement impact analysis, feature investigation, bug root cause analysis, regression planning, delivery planning, or architecture review involving implementation and test impact."
+      ],
+      "mandatory_mcp_sequence": [
+        "Identify the workflow type.",
+        "Select the required role profiles.",
+        "Preserve evidence references from each profile step.",
+        "Do not let one profile invent another profile's output.",
+        "Do not skip downstream profiles when the final answer requires implementation, test, delivery, or approval analysis.",
+        "Produce one final consolidated report."
+      ],
+      "forbidden_shortcuts": [
+        "Do not create new MCP tools for role-specific reports.",
+        "Do not add schema, runtime layers, or reporting-only storage for workflow formatting.",
+        "Do not produce final recommendations without evidence from documents, code, memory, or operational context.",
+        "Do not create or update external tasks without human approval.",
+        "Do not promote memory without human review."
+      ],
+      "output_contract": [
+        "Workflow type.",
+        "Profiles used.",
+        "Evidence collected.",
+        "Consolidated findings.",
+        "Evidence quality.",
+        "Human approval checklist.",
+        "Recommended next action."
+      ],
+      "memory_policy": [
+        "Use approved memory as evidence.",
+        "Propose memory only for reusable decisions, conventions, lessons learned, or bug patterns.",
+        "Never treat raw workflow output as approved memory.",
+        "Coordinate memory review cycles with developers using memory_review_list, memory_review_get, and memory_review_decide. Proactively identify and distinguish between approved knowhow and pending staged memories, and proactively ask for developer review/approval when pending staged memories exist. Enforce the item-by-item gate for high-impact categories. Never approve autonomously."
+      ]
+    }
+  ],
+  "primitiveMcpTools": [
+    "search_documents",
+    "search_code",
+    "get_file_symbols",
+    "describe_symbol",
+    "recall_memories",
+    "list_memories",
+    "get_memory",
+    "list_memory_decisions",
+    "list_retirement_proposals",
+    "propose_memory",
+    "unified_search",
+    "db_query",
+    "get_callers",
+    "trace_path",
+    "get_impact_radius",
+    "get_field_handlers",
+    "query_bugs",
+    "context_save",
+    "context_resume",
+    "context_search",
+    "read_working_memory",
+    "update_working_memory",
+    "memory_review_list",
+    "memory_review_get",
+    "memory_review_decide"
+  ],
+  "promotionRule": "Repeated workflows remain Agent Profiles unless deterministic reusable evidence logic qualifies for MCP promotion under ADR-010."
+}

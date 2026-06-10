@@ -1,0 +1,47 @@
+{
+  "categories": [
+    {
+      "id": "ai-coding-agents",
+      "label": "AI Coding Agents",
+      "keywords": ["agent", "cursor", "copilot"]
+    },
+    {
+      "id": "mcp-server",
+      "label": "Model Context Protocol",
+      "keywords": ["mcp", "model context protocol", "modelcontextprotocol"]
+    },
+    {
+      "id": "rag-context-engineering",
+      "label": "RAG & Context Engineering",
+      "keywords": ["rag", "vector", "context engineering"]
+    },
+    {
+      "id": "react-native-mobile",
+      "label": "React Native & Mobile",
+      "keywords": ["react native", "react-native", "expo"]
+    },
+    {
+      "id": "e2e-testing",
+      "label": "E2E Testing",
+      "keywords": ["playwright", "maestro", "detox"]
+    },
+    {
+      "id": "ai-wi-brain",
+      "label": "Personal AI Project Brain",
+      "keywords": ["ai-wi", "project brain", "project-brain"]
+    },
+    {
+      "id": "devtools-productivity",
+      "label": "Developer Productivity",
+      "keywords": ["turborepo", "semgrep", "devtools"]
+    }
+  ],
+  "prefilter": {
+    "minScore": 0.3,
+    "maxCandidatesForLLM": 15
+  },
+  "judge": {
+    "maxSelectedPerDay": 5,
+    "minLLMScore": 5
+  }
+}

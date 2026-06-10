@@ -1,0 +1,147 @@
+[
+  {
+    "id": "simonw-blog",
+    "name": "Simon Willison's Blog",
+    "type": "rss",
+    "url": "https://simonwillison.net/atom/everything/",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "mcp-server", "context-engineering"],
+    "weight": 1.5
+  },
+  {
+    "id": "the-pragmatic-engineer",
+    "name": "The Pragmatic Engineer (Substack)",
+    "type": "rss",
+    "url": "https://newsletter.pragmaticengineer.com/feed",
+    "enabled": true,
+    "tags": ["devtools-productivity"],
+    "weight": 1.3
+  },
+  {
+    "id": "modelcontextprotocol-releases",
+    "name": "MCP Spec — GitHub Releases",
+    "type": "github_releases",
+    "repo": "modelcontextprotocol/modelcontextprotocol",
+    "enabled": true,
+    "tags": ["mcp-server"],
+    "weight": 1.5
+  },
+  {
+    "id": "modelcontextprotocol-sdk-ts",
+    "name": "MCP TypeScript SDK — Releases",
+    "type": "github_releases",
+    "repo": "modelcontextprotocol/typescript-sdk",
+    "enabled": true,
+    "tags": ["mcp-server"],
+    "weight": 1.5
+  },
+  {
+    "id": "anthropic-sdk-python",
+    "name": "Anthropic Python SDK — Releases",
+    "type": "github_releases",
+    "repo": "anthropics/anthropic-sdk-python",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "context-engineering"],
+    "weight": 1.2
+  },
+  {
+    "id": "google-genai-sdk-python",
+    "name": "Google GenAI Python SDK — Releases",
+    "type": "github_releases",
+    "repo": "google-gemini/generative-ai-python",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "context-engineering"],
+    "weight": 1.2
+  },
+  {
+    "id": "playwright-releases",
+    "name": "Playwright — Releases",
+    "type": "github_releases",
+    "repo": "microsoft/playwright",
+    "enabled": true,
+    "tags": ["e2e-testing"],
+    "weight": 1.2
+  },
+  {
+    "id": "maestro-releases",
+    "name": "Maestro Mobile Testing — Releases",
+    "type": "github_releases",
+    "repo": "mobile-dev-inc/maestro",
+    "enabled": true,
+    "tags": ["mobile-automation", "e2e-testing"],
+    "weight": 1.3
+  },
+  {
+    "id": "detox-releases",
+    "name": "Detox — Releases",
+    "type": "github_releases",
+    "repo": "wix/Detox",
+    "enabled": true,
+    "tags": ["mobile-automation", "e2e-testing"],
+    "weight": 1.1
+  },
+  {
+    "id": "langchainjs-releases",
+    "name": "LangChain JS — Releases",
+    "type": "github_releases",
+    "repo": "langchain-ai/langchainjs",
+    "enabled": true,
+    "tags": ["context-engineering", "ai-coding-agents"],
+    "weight": 1.0
+  },
+  {
+    "id": "llamaindexts-releases",
+    "name": "LlamaIndex TS — Releases",
+    "type": "github_releases",
+    "repo": "run-llama/LlamaIndexTS",
+    "enabled": true,
+    "tags": ["context-engineering"],
+    "weight": 1.0
+  },
+  {
+    "id": "cursor-changelog",
+    "name": "Cursor Changelog",
+    "type": "rss",
+    "url": "https://cursor.com/changelog/rss.xml",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "devtools-productivity"],
+    "weight": 1.4
+  },
+  {
+    "id": "expo-releases",
+    "name": "Expo — Releases",
+    "type": "github_releases",
+    "repo": "expo/expo",
+    "enabled": true,
+    "tags": ["mobile-automation"],
+    "weight": 1.1
+  },
+  {
+    "id": "semgrep-releases",
+    "name": "Semgrep — Releases",
+    "type": "github_releases",
+    "repo": "returntocorp/semgrep",
+    "enabled": true,
+    "tags": ["security-risk", "devtools-productivity"],
+    "weight": 1.1
+  },
+  {
+    "id": "react-native-releases",
+    "name": "React Native — Releases",
+    "type": "github_releases",
+    "repo": "facebook/react-native",
+    "enabled": true,
+    "tags": ["mobile-automation"],
+    "weight": 1.2
+  },
+  {
+    "id": "turborepo-releases",
+    "name": "Turborepo — Releases",
+    "type": "github_releases",
+    "repo": "vercel/turborepo",
+    "enabled": false,
+    "_comment": "Disabled by default — less relevant to current workflow. Enable if needed.",
+    "tags": ["devtools-productivity"],
+    "weight": 0.9
+  }
+]
