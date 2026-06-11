@@ -8,6 +8,8 @@ export function loadConfig(): AppConfig {
   const geminiApiKey = process.env["GEMINI_API_KEY"] || "";
   const llmProvider = process.env["LLM_PROVIDER"] || "gemini";
   const geminiModel = process.env["GEMINI_MODEL"] || "gemini-2.5-flash";
+  const openaiApiKey = process.env["OPENAI_API_KEY"];
+  const fallbackModels = process.env["FALLBACK_MODELS"];
   const githubToken = process.env["GITHUB_TOKEN"];
 
   if (!geminiApiKey) {
@@ -30,6 +32,8 @@ export function loadConfig(): AppConfig {
     llmProvider,
     geminiApiKey,
     geminiModel,
+    openaiApiKey,
+    fallbackModels,
     githubToken,
     telegram,
     paths: {

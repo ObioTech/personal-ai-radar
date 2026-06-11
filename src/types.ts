@@ -79,6 +79,8 @@ export interface AppConfig {
   llmProvider: string;
   geminiApiKey: string;
   geminiModel: string;
+  openaiApiKey?: string;
+  fallbackModels?: string;
   githubToken?: string;
   telegram?: TelegramConfig;
   paths: {

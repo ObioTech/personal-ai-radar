@@ -16,15 +16,16 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "better-sqlite3": "^9.6.0",
+    "dotenv": "^16.4.0",
+    "openai": "^6.42.0",
     "rss-parser": "^3.13.0",
-    "zod": "^3.23.0",
-    "dotenv": "^16.4.0"
+    "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.14.0",
     "tsx": "^4.15.0",
     "typescript": "^5.5.0",
-    "@types/node": "^20.14.0",
-    "@types/better-sqlite3": "^7.6.0",
     "vitest": "^1.6.0"
   }
 }
