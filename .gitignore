@@ -6,3 +6,11 @@ data/*.sqlite-wal
 dist/
 *.js.map
 logs/
+
+# AI-WI & Agent Configurations
+.agents/
+.aiwi/
+.codex/
+.ai-rules.json
+AGENTS.md
+ai-instructions.md
