@@ -143,5 +143,68 @@
     "_comment": "Disabled by default — less relevant to current workflow. Enable if needed.",
     "tags": ["devtools-productivity"],
     "weight": 0.9
+  },
+  {
+    "id": "goonnguyen",
+    "name": "Goon Nguyen (Substack)",
+    "type": "rss",
+    "url": "https://goonnguyen.substack.com/feed",
+    "enabled": true,
+    "tags": ["software-engineering", "career", "system-design"],
+    "weight": 1.2
+  },
+  {
+    "id": "huggingface-blog",
+    "name": "Hugging Face Blog",
+    "type": "rss",
+    "url": "https://huggingface.co/blog/feed.xml",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "machine-learning"],
+    "weight": 1.4
+  },
+  {
+    "id": "martin-fowler",
+    "name": "Martin Fowler",
+    "type": "rss",
+    "url": "https://martinfowler.com/feed.atom",
+    "enabled": true,
+    "tags": ["system-design", "architecture", "software-engineering"],
+    "weight": 1.5
+  },
+  {
+    "id": "bytebytego",
+    "name": "ByteByteGo Newsletter",
+    "type": "rss",
+    "url": "https://blog.bytebytego.com/feed",
+    "enabled": true,
+    "tags": ["system-design", "architecture"],
+    "weight": 1.5
+  },
+  {
+    "id": "anthropic-news-unofficial",
+    "name": "Anthropic News (Unofficial RSS)",
+    "type": "rss",
+    "url": "https://rsshub.bestblogs.dev/anthropic/news",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "machine-learning"],
+    "weight": 1.4
+  },
+  {
+    "id": "continue-dev-releases",
+    "name": "Continue.dev — Releases",
+    "type": "github_releases",
+    "repo": "continuedev/continue",
+    "enabled": true,
+    "tags": ["ai-coding-agents", "devtools-productivity"],
+    "weight": 1.5
+  },
+  {
+    "id": "zed-editor-releases",
+    "name": "Zed Editor — Releases",
+    "type": "github_releases",
+    "repo": "zed-industries/zed",
+    "enabled": true,
+    "tags": ["devtools-productivity", "system-design"],
+    "weight": 1.5
   }
 ]
