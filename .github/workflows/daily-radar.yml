@@ -56,6 +56,12 @@ jobs:
           else
             echo "Existing database not found, will create a new one."
           fi
+          
+          # Copy existing docs to the 'source' folder so daily.ts can see previous reports and append to them
+          if [ -d database/docs ]; then
+            cp -r database/docs source/
+            echo "Copied existing docs to resume execution."
+          fi
 
       - name: Install & Run ObioRadar
         working-directory: ./source
