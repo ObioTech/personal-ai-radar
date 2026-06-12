@@ -6,6 +6,7 @@ Chào mừng đến với ObioRadar. Dưới đây là các bản tin công ngh�
 
 | Ngày | Bản tin |
 | :--- | :--- |
+| **2026-06-12** | [Đọc bản tin ngày 2026-06-12](./docs/daily/2026-06-12.md) |
 | **2026-06-11** | [Đọc bản tin ngày 2026-06-11](./docs/daily/2026-06-11.md) |
 
 ---
