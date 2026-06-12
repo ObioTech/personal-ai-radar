@@ -1,0 +1,96 @@
+name: ObioRadar Daily Run
+
+on:
+  schedule:
+    - cron: '15 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-radar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: source/package-lock.json
+
+      - name: Checkout or Create Data Branch
+        run: |
+          # Clone the repo again into a 'database' folder
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git database
+          cd database
+          
+          # Try to switch to the 'radar-data' branch if it exists
+          if git ls-remote --exit-code --heads origin radar-data; then
+            git checkout radar-data
+          else
+            # If it doesn't exist, create an empty orphan branch
+            git checkout --orphan radar-data
+            git rm -rf .
+            echo "# ObioRadar Data Branch" > README.md
+            echo "This branch is automatically created by GitHub Actions to store the SQLite database and reports, keeping the main branch clean." >> README.md
+            git add README.md
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: init data branch"
+            git push origin radar-data
+          fi
+
+      - name: Prepare Local Data
+        run: |
+          # Copy the existing database from the 'database' folder to the 'source' folder so the script can use it
+          mkdir -p source/data
+          if [ -f database/obio-radar.sqlite ]; then
+            cp database/obio-radar.sqlite source/data/
+            echo "Copied existing database to resume execution."
+          else
+            echo "Existing database not found, will create a new one."
+          fi
+
+      - name: Install & Run ObioRadar
+        working-directory: ./source
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RADAR_GH_TOKEN: ${{ secrets.RADAR_GH_TOKEN }}
+          PUBLIC_PAGE_URL: ${{ vars.PUBLIC_PAGE_URL || secrets.PUBLIC_PAGE_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          npm ci || npm install
+          npm run daily
+
+      - name: Commit Data back to Data Branch
+        run: |
+          # Copy the updated database, docs, and index README back to the 'database' folder
+          cp source/data/obio-radar.sqlite database/ || true
+          rm -rf database/docs/docs || true  # Dọn dẹp lỗi lồng thư mục docs cũ
+          mkdir -p database/docs/
+          cp -r source/docs/* database/docs/ 2>/dev/null || true
+          cp source/data/PAGES_README.md database/README.md 2>/dev/null || true
+          
+          cd database
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add obio-radar.sqlite
+          git add docs/ 2>/dev/null || true
+          git add README.md 2>/dev/null || true
+          
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore(data): update daily radar database and reports [skip ci]"
+            git push origin radar-data
+            echo "Successfully saved new data to the radar-data branch."
+          else
+            echo "No new data changes to commit."
+          fi
