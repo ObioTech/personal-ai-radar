@@ -83,6 +83,8 @@ export interface AppConfig {
   fallbackModels?: string;
   githubToken?: string;
   telegram?: TelegramConfig;
+  publicPageUrl?: string;
+  reportLanguage: string;
   paths: {
     docsDaily: string;
     docsReports: string;

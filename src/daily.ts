@@ -15,6 +15,7 @@ import { renderDailyMarkdown } from "./pipeline/renderDaily.js";
 import { markSeen } from "./storage/seenStore.js";
 import { upsertCandidates, updateCandidateJudgement } from "./storage/candidateStore.js";
 import { Source, AppConfig, CandidateItem, JudgedItem, DiscardReason, DailyResult } from "./types.js";
+import { generateIndexReadme } from "./pipeline/generateIndex.js";
 
 // Optional import since it is implemented in Step 9
 let sendTelegramNotification: any = null;
@@ -205,7 +206,7 @@ async function main() {
   let ignored: Array<{ item: CandidateItem; reason: DiscardReason }> = [];
 
   if (shortlist.length > 0) {
-    const judgePrompt = loadPrompt(config, "item-judge.md");
+    const judgePrompt = loadPrompt(config, "item-judge.md").replace(/\{\{LANGUAGE\}\}/g, config.reportLanguage);
     const judgeResult = await judgeItems(llm, shortlist, judgePrompt, {
       verbose: args.verbose,
       minLLMScore: topics.judge.minLLMScore,
@@ -239,7 +240,7 @@ async function main() {
   // 6. SUMMARY
   let generalNotes = "";
   if (selected.length > 0) {
-    const summaryPrompt = loadPrompt(config, "daily-summary.md");
+    const summaryPrompt = loadPrompt(config, "daily-summary.md").replace(/\{\{LANGUAGE\}\}/g, config.reportLanguage);
     generalNotes = await generateDailySummary(llm, selected, date, summaryPrompt);
   } else {
     generalNotes = "Không có tín hiệu đủ đáng chú ý hôm nay.";
@@ -259,28 +260,50 @@ async function main() {
 
   const markdown = renderDailyMarkdown(result);
 
-  // 8. WRITE
+  // 8. WRITE & DELIVER
   if (args.dryRun) {
     console.log("\n--- [DRY RUN OUTPUT] ---");
     console.log(markdown);
   } else {
     const filePath = path.join(config.paths.docsDaily, `${date}.md`);
     try {
-      await safeWriteFile(filePath, markdown);
-      console.log(`✓ Daily radar saved: ${filePath}`);
+      const { fileExists } = await import("./utils/file.js");
+      const exists = await fileExists(filePath);
+      
+      let shouldDeliver = true;
+
+      if (exists) {
+        if (result.noItemToday) {
+          console.log(`[SKIP] Không có tin mới, bỏ qua việc ghi đè file cũ: ${filePath}`);
+          shouldDeliver = false; // Đã tồn tại báo cáo cũ rồi và không có tin mới thì không báo nữa
+        } else {
+          const oldContent = readFileSync(filePath, "utf-8");
+          const timeStr = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+          const appendedContent = `${oldContent}\n\n---\n\n## 🕒 Cập nhật bổ sung lúc ${timeStr}\n\n${markdown}`;
+          await safeWriteFile(filePath, appendedContent);
+          console.log(`✓ Daily radar appended: ${filePath}`);
+        }
+      } else {
+        await safeWriteFile(filePath, markdown);
+        console.log(`✓ Daily radar saved: ${filePath}`);
+      }
+
+      // 9. DELIVER
+      if (shouldDeliver && config.telegram && sendTelegramNotification) {
+        await sendTelegramNotification(config.telegram, result, config.publicPageUrl).catch((e: any) => {
+          console.warn(`[WARN] Telegram delivery failed: ${e.message}`);
+        });
+      }
+
     } catch (e: any) {
       console.error(`[ERROR] Ghi file markdown thất bại: ${e.message}`);
       console.log("\n--- [FALLBACK OUTPUT TO CONSOLE] ---");
       console.log(markdown);
       process.exit(1);
     }
-  }
 
-  // 9. DELIVER
-  if (!args.dryRun && config.telegram && sendTelegramNotification) {
-    await sendTelegramNotification(config.telegram, result).catch((e: any) => {
-      console.warn(`[WARN] Telegram delivery failed: ${e.message}`);
-    });
+    // 10. GENERATE INDEX FOR GITHUB PAGES (always runs, even if no new items)
+    await generateIndexReadme(config);
   }
 }
 

@@ -15,6 +15,7 @@ describe("LLM judge pipeline step", () => {
             workflowConnection: "Tool automation",
             skepticalNotes: "Hoi phuc tap",
             suggestedAction: "Nghien cuu",
+            translatedSummary: "Tom tat tieng Viet",
             llmScore: 8
           }
         ])
@@ -61,6 +62,7 @@ describe("LLM judge pipeline step", () => {
               workflowConnection: "Tooling",
               skepticalNotes: "Chua lam gi",
               suggestedAction: "",
+              translatedSummary: "Tom tat",
               llmScore: 6
             }
           ])

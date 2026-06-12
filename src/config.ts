@@ -10,7 +10,8 @@ export function loadConfig(): AppConfig {
   const geminiModel = process.env["GEMINI_MODEL"] || "gemini-2.5-flash";
   const openaiApiKey = process.env["OPENAI_API_KEY"];
   const fallbackModels = process.env["FALLBACK_MODELS"];
-  const githubToken = process.env["GITHUB_TOKEN"];
+  const githubToken = process.env["RADAR_GH_TOKEN"] || process.env["GITHUB_TOKEN"];
+  const publicPageUrl = process.env["PUBLIC_PAGE_URL"];
 
   if (!geminiApiKey) {
     throw new Error("GEMINI_API_KEY is required. Please set it in your .env file.");
@@ -27,6 +28,7 @@ export function loadConfig(): AppConfig {
   }
 
   const baseDir = process.cwd();
+  const reportLanguage = process.env["REPORT_LANGUAGE"] || "Vietnamese";
 
   return {
     llmProvider,
@@ -35,7 +37,9 @@ export function loadConfig(): AppConfig {
     openaiApiKey,
     fallbackModels,
     githubToken,
+    publicPageUrl,
     telegram,
+    reportLanguage,
     paths: {
       docsDaily: path.join(baseDir, "docs", "daily"),
       docsReports: path.join(baseDir, "docs", "reports"),

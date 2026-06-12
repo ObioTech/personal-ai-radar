@@ -27,7 +27,7 @@ BLOCKED_BY_RISK: Tool/MCP with system access — security evaluation needed firs
 - If information is insufficient → prefer WATCH over guessing.
 - skepticalNotes MUST contain at least 1 specific concern. Never leave empty.
 - workflowConnection MUST mention a specific workflow area (e.g., AI-WI, mobile testing).
-- All text fields MUST be in Vietnamese.
+- All text fields MUST be translated to {{LANGUAGE}}.
 - Technical terms (MCP, RAG, SQLite, etc.) keep in English.
 - llmScore: 1–10 where 10 = critical/urgent, 1 = noise.
 - llmScore ≤ 5 should be IGNORE or WATCH.
@@ -37,10 +37,11 @@ Return a JSON array. Each element:
 {
   "id": "<contentHash from input>",
   "decision": "<label>",
-  "relevanceReason": "<Vietnamese>",
-  "workflowConnection": "<Vietnamese>",
-  "skepticalNotes": "<Vietnamese>",
-  "suggestedAction": "<Vietnamese or empty string>",
+  "relevanceReason": "<{{LANGUAGE}}>",
+  "workflowConnection": "<{{LANGUAGE}}>",
+  "skepticalNotes": "<{{LANGUAGE}}>",
+  "suggestedAction": "<{{LANGUAGE}} or empty string>",
+  "translatedSummary": "<Translate the summary to {{LANGUAGE}}>",
   "llmScore": <number>
 }
 

@@ -33,11 +33,11 @@ export function renderDailyMarkdown(result: DailyResult): string {
         const categoriesText = item.matchedCategories.join(" / ") || "Uncategorized";
         const decisionText = decisionLabelVi(item.decision);
 
-        return `### ${index}. ${item.title}
+        return `### ${index}. [${item.title}](${item.url}) <!-- REPORT_LINK:${item.slug} -->
 
 **Quyết định:** ${decisionText}
 **Danh mục:** ${categoriesText}
-**Nguồn:** [${item.sourceId}](${item.url})
+**Nguồn:** ${item.sourceId}
 **Điểm:** ${item.llmScore}/10
 
 **Tóm tắt ngắn:**
@@ -53,7 +53,7 @@ ${item.workflowConnection}
 ${item.skepticalNotes}
 
 **Đọc sâu hơn:**
-\`npm run report -- ${item.slug}\`
+*(Tạo báo cáo chi tiết bằng lệnh: \`npm run report -- ${item.slug}\`)*
 `;
       })
       .join("\n---\n\n");

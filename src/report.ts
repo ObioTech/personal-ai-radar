@@ -12,6 +12,7 @@ import { updateSeenStatus } from "./storage/seenStore.js";
 import { renderReportMarkdown } from "./pipeline/renderReport.js";
 import { CandidateItem, ReportInput } from "./types.js";
 import { LLMProvider } from "./llm/types.js";
+import { generateIndexReadme } from "./pipeline/generateIndex.js";
 
 function parseReportArgs(): ReportInput {
   const args = process.argv.slice(2);
@@ -153,11 +154,32 @@ async function main() {
 
   console.log(`[REPORT] Đang tạo deep-dive report cho: ${reportItem.title}...`);
 
-  const prompt = loadPrompt(config, "deep-dive-report.md");
+  const prompt = loadPrompt(config, "deep-dive-report.md").replace(/\{\{LANGUAGE\}\}/g, config.reportLanguage);
   const reportContent = await generateDeepDiveReport(llm, reportItem, prompt);
   const markdown = renderReportMarkdown(reportItem, reportContent, slug);
 
   await safeWriteFile(outputPath, markdown);
+
+  // Patch daily markdown files to replace the placeholder with an actual link
+  try {
+    const { readdirSync, readFileSync, writeFileSync } = await import("fs");
+    const dailyFiles = readdirSync(config.paths.docsDaily).filter(f => f.endsWith(".md"));
+    for (const file of dailyFiles) {
+      const dailyPath = path.join(config.paths.docsDaily, file);
+      let content = readFileSync(dailyPath, "utf-8");
+      const targetStr = `<!-- REPORT_LINK:${slug} -->`;
+      if (content.includes(targetStr)) {
+        content = content.replace(
+          targetStr,
+          `[📖 Đã có Báo cáo chuyên sâu -> Bấm để đọc](/reports/${slug})`
+        );
+        writeFileSync(dailyPath, content, "utf-8");
+        console.log(`✓ Patched link in daily digest: ${file}`);
+      }
+    }
+  } catch (e: any) {
+    console.warn(`[WARN] Failed to patch daily markdown files: ${e.message}`);
+  }
 
   // Update DB seen_items status to reported
   updateSeenStatus(db, reportItem.contentHash, {
@@ -165,6 +187,8 @@ async function main() {
     reportSlug: slug,
     reportedAt: nowISO(),
   });
+
+  await generateIndexReadme(config);
 
   console.log(`✓ Report saved: ${outputPath}`);
 }

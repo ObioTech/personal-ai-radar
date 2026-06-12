@@ -6,10 +6,11 @@ import { nowISO } from "../utils/date.js";
 const JudgeResultSchema = z.object({
   id: z.string(),
   decision: z.enum(["ADOPT_NOW", "SPIKE", "WATCH", "IGNORE", "BLOCKED_BY_RISK", "UNKNOWN"]),
-  relevanceReason: z.string().min(1),
-  workflowConnection: z.string().min(1),
-  skepticalNotes: z.string().min(1),
+  relevanceReason: z.string(),
+  workflowConnection: z.string(),
+  skepticalNotes: z.string(),
   suggestedAction: z.string().default(""),
+  translatedSummary: z.string(),
   llmScore: z.number().min(0).max(10),
 });
 
@@ -96,6 +97,7 @@ export async function judgeItems(
         workflowConnection: judgement.workflowConnection,
         skepticalNotes: judgement.skepticalNotes,
         suggestedAction: judgement.suggestedAction,
+        summary: judgement.translatedSummary || item.summary,
         llmScore: judgement.llmScore,
         judgedAt,
       };
@@ -113,16 +115,6 @@ export async function judgeItems(
         ignored.push({ item, reason });
       }
     } else {
-      const fallbackItem: JudgedItem = {
-        ...item,
-        decision: "UNKNOWN",
-        relevanceReason: "Không thể phân tích kết quả từ LLM.",
-        workflowConnection: "Chưa xác định",
-        skepticalNotes: "LLM response parse failure",
-        suggestedAction: "",
-        llmScore: 0,
-        judgedAt,
-      };
       ignored.push({ item, reason: "llm_unknown" });
     }
   }

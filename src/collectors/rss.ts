@@ -8,14 +8,19 @@ export async function fetchRssFeed(source: Source): Promise<RawItem[]> {
     throw new Error(`Missing URL for RSS source: ${source.id}`);
   }
 
-  const parser = new Parser();
+  const parser = new Parser({
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Accept": "application/rss+xml, application/xml, application/atom+xml, text/xml, text/html, */*"
+    }
+  });
 
-  // 10s Timeout wrapper
+  // 20s Timeout wrapper
   const fetchPromise = parser.parseURL(source.url);
   const timeoutPromise = new Promise<never>((_, reject) => {
     const timer = setTimeout(() => {
       reject(new Error(`Timeout fetching RSS feed: ${source.id}`));
-    }, 10000);
+    }, 20000);
     // Unref timer if running in Node to allow graceful exit
     if (timer.unref) timer.unref();
   });
