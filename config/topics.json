@@ -34,6 +34,26 @@
       "id": "devtools-productivity",
       "label": "Developer Productivity",
       "keywords": ["turborepo", "semgrep", "devtools"]
+    },
+    {
+      "id": "speech-tts-audio",
+      "label": "Text-to-Speech & Voice AI",
+      "keywords": ["tts", "text-to-speech", "voice", "speech", "vits", "xtts", "bark", "rvc"]
+    },
+    {
+      "id": "ai-code-models",
+      "label": "Coding Models & Code LLMs",
+      "keywords": ["code", "codellm", "qwen-coder", "deepseek-coder", "starcoder", "codegeex"]
+    },
+    {
+      "id": "creative-media-genai",
+      "label": "Text-to-Image & Image-to-Video",
+      "keywords": ["text-to-image", "image-to-video", "text-to-video", "diffusion", "flux", "wan", "sora", "cogvideo", "hunyuan", "svd"]
+    },
+    {
+      "id": "vietnamese-ai",
+      "label": "Vietnamese AI Models & Datasets",
+      "keywords": ["vietnamese", "tiếng việt", "viva", "phogpt", "vinai"]
     }
   ],
   "prefilter": {

@@ -1,6 +1,10 @@
 import { Source, RawItem, AppConfig } from "../types.js";
 import { fetchRssFeed } from "../collectors/rss.js";
 import { fetchGithubReleases } from "../collectors/github.js";
+import {
+  fetchHuggingFaceTrending,
+  fetchHuggingFacePapers,
+} from "../collectors/huggingface.js";
 
 export async function collectAll(
   sources: Source[],
@@ -18,6 +22,10 @@ export async function collectAll(
         items = await fetchRssFeed(source);
       } else if (source.type === "github_releases") {
         items = await fetchGithubReleases(source, config.githubToken, options);
+      } else if (source.type === "huggingface_trending") {
+        items = await fetchHuggingFaceTrending(source, options);
+      } else if (source.type === "huggingface_papers") {
+        items = await fetchHuggingFacePapers(source, options);
       }
       if (options?.verbose) {
         console.log(`[COLLECT] Fetched ${items.length} items from ${source.id}`);

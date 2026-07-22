@@ -206,5 +206,31 @@
     "enabled": true,
     "tags": ["devtools-productivity", "system-design"],
     "weight": 1.5
+  },
+  {
+    "id": "hf-trending-models",
+    "name": "Hugging Face Trending Models",
+    "type": "huggingface_trending",
+    "hfType": "model",
+    "enabled": true,
+    "tags": ["speech-tts-audio", "ai-code-models", "creative-media-genai", "vietnamese-ai"],
+    "weight": 1.4
+  },
+  {
+    "id": "hf-daily-papers",
+    "name": "Hugging Face Daily Papers",
+    "type": "huggingface_papers",
+    "enabled": true,
+    "tags": ["machine-learning", "ai-code-models", "creative-media-genai"],
+    "weight": 1.3
+  },
+  {
+    "id": "hf-trending-spaces",
+    "name": "Hugging Face Trending Spaces (Demos)",
+    "type": "huggingface_trending",
+    "hfType": "space",
+    "enabled": true,
+    "tags": ["creative-media-genai", "speech-tts-audio"],
+    "weight": 1.2
   }
 ]

@@ -13,9 +13,10 @@ export type SeenStatus = "selected" | "ignored" | "reported";
 export interface Source {
   id: string;
   name: string;
-  type: "rss" | "github_releases";
+  type: "rss" | "github_releases" | "huggingface_trending" | "huggingface_papers";
   url?: string;
   repo?: string;
+  hfType?: "model" | "space" | "dataset";
   enabled: boolean;
   tags: string[];
   weight: number;
