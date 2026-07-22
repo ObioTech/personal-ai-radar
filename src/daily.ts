@@ -29,9 +29,10 @@ try {
 const SourceSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.enum(["rss", "github_releases"]),
+  type: z.enum(["rss", "github_releases", "huggingface_trending", "huggingface_papers"]),
   url: z.string().optional(),
   repo: z.string().optional(),
+  hfType: z.enum(["model", "space", "dataset"]).optional(),
   enabled: z.boolean(),
   tags: z.array(z.string()),
   weight: z.number(),
