@@ -8,6 +8,7 @@ Chào mừng đến với **ObioRadar**, hệ thống AI tự động thu thập
 
 | Ngày | Bản tin |
 | :--- | :--- |
+| **2026-09-28** | [Đọc bản tin ngày 2026-09-28](./docs/daily/2026-09-28.md) |
 | **2026-09-27** | [Đọc bản tin ngày 2026-09-27](./docs/daily/2026-09-27.md) |
 | **2026-09-26** | [Đọc bản tin ngày 2026-09-26](./docs/daily/2026-09-26.md) |
 | **2026-09-25** | [Đọc bản tin ngày 2026-09-25](./docs/daily/2026-09-25.md) |
